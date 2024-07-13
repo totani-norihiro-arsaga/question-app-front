@@ -22,3 +22,8 @@ export interface Survey {
     updatedDate: string;
     questionId: number;
   }
+
+  export interface Answer {
+    surveyId: string | null,
+    [key: number]: number | null
+  }
