@@ -5,7 +5,7 @@ const END_POINT = 'http://localhost:3000/';
 
 const surveyApi = {
     async index() {
-        const result = await axios.get(END_POINT + `survey/index`);
+        const result = await axios.get(END_POINT + `admin/survey/index`);
 
         return result.data;
     },

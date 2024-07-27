@@ -51,7 +51,7 @@ const SurveyIndex:React.FC = () => {
           <ul>
             {currentItems.map((survey) => (
               <SurveyListItem key={survey.id}>
-                <SurveyLink to={`/survey/${survey.id}`}>
+                <SurveyLink to={`/admin/survey/${survey.id}`}>
                   {survey.title}
                 </SurveyLink>{" "}
                 (Created: {new Date(survey.createdDate).toLocaleString()})
