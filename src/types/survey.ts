@@ -25,5 +25,5 @@ export interface Survey {
 
   export interface Answer {
     surveyId: string | null,
-    [key: number]: number | null
+    contens:{[key: number]: number | null}
   }
