@@ -65,7 +65,6 @@ const SurveyForm: React.FC = () => {
 
   return (
     <>
-      <h1>{complete}</h1>
       <form onSubmit={handleSubmit}>
         <h1>{survey?.title}</h1>
         {survey?.questions.map((question) => (
