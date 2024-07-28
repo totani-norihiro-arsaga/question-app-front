@@ -22,7 +22,7 @@ const SurveyLink = styled(Link)`
   }
 `;
 
-const SurveyIndex:React.FC = () => {
+const SurveyIndex: React.FC = () => {
   const [surveys, setSurveys] = useState<Survey[]>([]);
   const fetchData = async () => {
     const data = await surveyApi.index();
@@ -39,46 +39,46 @@ const SurveyIndex:React.FC = () => {
   const handlePageClick = (event: { selected: number }) => {
     const newOffset = (event.selected * itemsPerPage) % surveys.length;
     setItemOffset(newOffset);
-  }
-    useEffect(() => {
-      fetchData();
-    }, []);
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
 
-    return (
-      <>
-        <SurveyListContainer>
-          <h2>Survey List</h2>
-          <ul>
-            {currentItems.map((survey) => (
-              <SurveyListItem key={survey.id}>
-                <SurveyLink to={`/admin/survey/${survey.id}`}>
-                  {survey.title}
-                </SurveyLink>{" "}
-                (Created: {new Date(survey.createdDate).toLocaleString()})
-              </SurveyListItem>
-            ))}
-          </ul>
-          <ReactPaginate
-            previousLabel="Previous"
-            nextLabel="Next"
-            pageClassName="page-item"
-            pageLinkClassName="page-link"
-            previousClassName="page-item"
-            previousLinkClassName="page-link"
-            nextClassName="page-item"
-            nextLinkClassName="page-link"
-            breakLabel="..."
-            breakClassName="page-item"
-            breakLinkClassName="page-link"
-            pageCount={pageCount}
-            marginPagesDisplayed={2}
-            pageRangeDisplayed={5}
-            onPageChange={handlePageClick}
-            containerClassName="pagination"
-            activeClassName="active"
-          />
-        </SurveyListContainer>
-      </>
-    );
+  return (
+    <>
+      <SurveyListContainer>
+        <h2>Survey List</h2>
+        <ul>
+          {currentItems.map((survey) => (
+            <SurveyListItem key={survey.id}>
+              <SurveyLink to={`/admin/survey/${survey.id}`}>
+                {survey.title}
+              </SurveyLink>{" "}
+              (Created: {new Date(survey.createdDate).toLocaleString()})
+            </SurveyListItem>
+          ))}
+        </ul>
+        <ReactPaginate
+          previousLabel="Previous"
+          nextLabel="Next"
+          pageClassName="page-item"
+          pageLinkClassName="page-link"
+          previousClassName="page-item"
+          previousLinkClassName="page-link"
+          nextClassName="page-item"
+          nextLinkClassName="page-link"
+          breakLabel="..."
+          breakClassName="page-item"
+          breakLinkClassName="page-link"
+          pageCount={pageCount}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={5}
+          onPageChange={handlePageClick}
+          containerClassName="pagination"
+          activeClassName="active"
+        />
+      </SurveyListContainer>
+    </>
+  );
 };
 export default SurveyIndex;
