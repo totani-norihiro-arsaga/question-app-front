@@ -49,3 +49,16 @@ export type ShowSurveyRespose = {
   survey: SurveyDetail;
   total_answered_amount: number;
 };
+
+export type ChoiceInForm = Pick<Choice, "choiceText">;
+
+export type QuestionInForm = {
+  questionText:string;
+  responseFormat:number;
+  choices:ChoiceInForm[];
+}
+
+export type SurveyForm = {
+  title:string;
+  questions: QuestionInForm[];
+}
