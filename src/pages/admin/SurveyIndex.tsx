@@ -130,6 +130,13 @@ const SurveyIndex: React.FC = () => {
     fetchData();
   }, []);
 
+  if(surveys.length === 0) {
+    return (
+      <ContentWSrapper>
+        <h1>アンケートを作成して下さい。</h1>
+      </ContentWSrapper>
+    )
+  }
   return (
     <ContentWSrapper>
       <SurveyListContainer>
