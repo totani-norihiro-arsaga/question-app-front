@@ -1,10 +1,66 @@
 import React, { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { useParams } from "react-router-dom";
+import styled from "styled-components";
 import surveyApi from "../../api/survey";
 import { Survey, Answer } from "../../types/survey";
 import NotFound from "../error/NotFoutd";
 import Complete from "../Common/Complete";
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+  background-color: #f9f9f9;
+`;
+
+const StyledForm = styled.form`
+  background: #fff;
+  padding: 40px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  width: 100%;
+`;
+
+const Title = styled.h1`
+  font-size: 24px;
+  margin-bottom: 20px;
+  text-align: center;
+`;
+
+const Question = styled.div`
+  margin-bottom: 20px;
+`;
+
+const QuestionTitle = styled.h2`
+  font-size: 20px;
+  margin-bottom: 10px;
+`;
+
+const Choice = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+`;
+
+const StyledButton = styled.button`
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+
+  &:hover {
+    background-color: #0056b3;
+  }
+`;
 
 const SurveyForm: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -15,13 +71,13 @@ const SurveyForm: React.FC = () => {
   const [survey, setSurvey] = useState<Survey | null>(null);
   const [complete, setComplete] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
-  const [cookies, setCookies] = useCookies([id ?? 'undecided']);
-  
+  const [cookies, setCookies] = useCookies([id ?? "undecided"]);
+
   useEffect(() => {
     const getData = async () => {
       try {
-        if(!id) {
-          throw new Error('アンケートのIDが指定されておりません。');
+        if (!id) {
+          throw new Error("アンケートのIDが指定されておりません。");
         }
         const result = await surveyApi.show(id);
         const contents: { [key: number]: number | null } = {};
@@ -35,7 +91,7 @@ const SurveyForm: React.FC = () => {
       }
     };
     getData();
-  });
+  }, [id]);
 
   const handleAnswerChange = (questionId: number, choiceId: number) => {
     const newContents = answers.contens;
@@ -50,7 +106,7 @@ const SurveyForm: React.FC = () => {
     event.preventDefault();
     const statusCode = await surveyApi.answer(answers);
     if (statusCode === 201) {
-      setCookies(id!, true, {expires: new Date(Date.now() + 3600000 * 24 * 365)});
+      setCookies(id!, true, { expires: new Date(Date.now() + 3600000 * 24 * 365) });
       setComplete(true);
     }
   };
@@ -64,14 +120,14 @@ const SurveyForm: React.FC = () => {
   }
 
   return (
-    <>
-      <form onSubmit={handleSubmit}>
-        <h1>{survey?.title}</h1>
+    <Container>
+      <StyledForm onSubmit={handleSubmit}>
+        <Title>{survey?.title}</Title>
         {survey?.questions.map((question) => (
-          <div key={question.id}>
-            <h2>{question.questionText}</h2>
+          <Question key={question.id}>
+            <QuestionTitle>{question.questionText}</QuestionTitle>
             {question.choices.map((choice) => (
-              <div key={choice.id}>
+              <Choice key={choice.id}>
                 <label>
                   <input
                     type="radio"
@@ -82,13 +138,13 @@ const SurveyForm: React.FC = () => {
                   />
                   {choice.choiceText}
                 </label>
-              </div>
+              </Choice>
             ))}
-          </div>
+          </Question>
         ))}
-        <button type="submit">Submit</button>
-      </form>
-    </>
+        <StyledButton type="submit">回答</StyledButton>
+      </StyledForm>
+    </Container>
   );
 };
 
