@@ -8,12 +8,14 @@ import SurveyIndex from "./pages/admin/SurveyIndex";
 import SurveyForm from "./pages/User/SurveyForm";
 import SurveyShow from "./pages/admin/SurveyShow";
 import SurveyCreate from "./pages/admin/SurveyCreate";
+import NotFound from "./pages/error/NotFoutd";
 
 const AppRoutes = () => {
     return (
         <BrowserRouter>
             <Routes>
-                <Route path='/admin' element={<AdminHome/>} />
+                <Route path='/' element={<NotFound/>} />
+                <Route path='/admin/home' element={<AdminHome/>} />
                 <Route path='/admin/survey/index' element={<SurveyIndex/>} />
                 <Route path='/admin/survey/create' element={<SurveyCreate/>} />
                 <Route path='/admin/survey/:id' element={<SurveyShow/>} />

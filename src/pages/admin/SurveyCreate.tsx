@@ -2,24 +2,32 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { SurveyForm } from "../../types/survey";
 import surveyApi from "../../api/survey";
+import { Link } from "react-router-dom";
+import { APP_DOMAIN } from "../../constants";
+
+const PageContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #f0f0f0;
+  `;
 
 const FormContainer = styled.div`
   padding: 20px;
   max-width: 700px;
-  max-height: 100vh;
-  margin: auto;
-  overflow: hidden;
+  height: 550px;
+  width: 100%;
+  margin: 20px auto;
   background-color: #f9f9f9;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  display: flex;
-  justify-content: center;
 `;
 
 const Form = styled.form`
   max-height: 100%;
   overflow-y: auto;
-  width: 600px;
+  width: 100%;
   padding: 20px;
 `;
 
@@ -55,8 +63,24 @@ const Button = styled.button`
   }
 `;
 
+const BackButton = styled(Button)`
+  background-color: #6c757d;
+  color: white;
+  &:hover {
+    background-color: #5a6268;
+  }
+  a {
+    padding: 10px 20px;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+  }
+`;
+
 const SubmitButtonContainer = styled.div`
-  text-align: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin: 10px;
 `;
 
@@ -124,57 +148,65 @@ const CreateSurvey: React.FC = () => {
     setSurvey({ ...survey, questions: newQuestions });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    surveyApi.create(survey);
+    const status = await surveyApi.create(survey);
+    if(status === 201) {
+      window.location.href = APP_DOMAIN + `admin/survey/index`;
+    }
   };
 
   return (
-    <FormContainer>
-      <Form onSubmit={handleSubmit}>
-        <FormGroup>
-          <Label>アンケートタイトル</Label>
-          <Input
-            type="text"
-            value={survey.title}
-            onChange={handleTitleChange}
-          />
-        </FormGroup>
-        {survey.questions.map((question, questionIndex) => (
-          <FormGroup key={questionIndex}>
-            <Label>質問{questionIndex + 1}</Label>
+    <PageContainer>
+      <FormContainer>
+        <Form onSubmit={handleSubmit}>
+          <FormGroup>
+            <Label>アンケートタイトル</Label>
             <Input
               type="text"
-              value={question.questionText}
-              onChange={(e) => handleQuestionChange(questionIndex, e)}
+              value={survey.title}
+              onChange={handleTitleChange}
             />
-            <ChoiceContainer>
-              {question.choices.map((choice, choiceIndex) => (
-                <div key={choiceIndex}>
-                  <Label>選択肢{choiceIndex + 1}</Label>
-                  <Input
-                    type="text"
-                    value={choice.choiceText}
-                    onChange={(e) =>
-                      handleChoiceChange(questionIndex, choiceIndex, e)
-                    }
-                  />
-                </div>
-              ))}
-              <Button type="button" onClick={() => addChoice(questionIndex)}>
-                選択肢+
-              </Button>
-            </ChoiceContainer>
-            <Button type="button" onClick={addQuestion}>
-              質問+
-            </Button>
           </FormGroup>
-        ))}
-        <SubmitButtonContainer>
-          <Button type="submit">アンケートを作成</Button>
-        </SubmitButtonContainer>
-      </Form>
-    </FormContainer>
+          {survey.questions.map((question, questionIndex) => (
+            <FormGroup key={questionIndex}>
+              <Label>質問{questionIndex + 1}</Label>
+              <Input
+                type="text"
+                value={question.questionText}
+                onChange={(e) => handleQuestionChange(questionIndex, e)}
+              />
+              <ChoiceContainer>
+                {question.choices.map((choice, choiceIndex) => (
+                  <div key={choiceIndex}>
+                    <Label>選択肢{choiceIndex + 1}</Label>
+                    <Input
+                      type="text"
+                      value={choice.choiceText}
+                      onChange={(e) =>
+                        handleChoiceChange(questionIndex, choiceIndex, e)
+                      }
+                    />
+                  </div>
+                ))}
+                <Button type="button" onClick={() => addChoice(questionIndex)}>
+                  選択肢+
+                </Button>
+              </ChoiceContainer>
+              <Button type="button" onClick={addQuestion}>
+                質問+
+              </Button>
+            </FormGroup>
+          ))}
+          <SubmitButtonContainer>
+            <Button type="submit">アンケートを作成</Button>
+            <BackButton type="button">
+              <Link to="/admin/home">ホーム</Link>
+            </BackButton>
+          </SubmitButtonContainer>
+        </Form>
+      </FormContainer>
+    </PageContainer>
   );
 };
 
